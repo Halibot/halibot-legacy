@@ -37,6 +37,7 @@ def loadConfig():
 class Bot(ClientXMPP):
 
 	modules = []
+	config = None
 
 	def __init__(self, jid, password, rooms):
 		ClientXMPP.__init__(self,jid,password)
@@ -48,6 +49,10 @@ class Bot(ClientXMPP):
 		self.add_event_handler("session_start", self.session_start)
 		self.add_event_handler("message", self.message)
 		self.add_event_handler("groupchat_message", self.groupmsg)
+
+		with open("config.json", "r") as f:
+			self.config = json.loads(f.read())
+
 
 	def load_modules(self):
 		# TODO: Put this dir in config?
