@@ -4,11 +4,21 @@ from module import XMPPModule
 def sylcnt(word):
 	lastvowel = False
 	syl = 0
-	for i in range(len(word)):
+	l = len(word)
+
+	# remove e, es from end of words
+	if word[l - 1] == 'e':
+		word = word[0:l - 1]
+	elif word[l - 2:] == 'es':
+		word = word[0:l - 2]
+
+	for i in range(l):
 		c = word[i]
-		vowel = (c == 'a' or c == 'e' or c == 'i' or c == 'o' or c == 'u')
-		if lastvowel != vowel and (c != 'e' or i != len(word) - 1):
+		vowel = (c == 'a' or c == 'e' or c == 'i' or c == 'o' or c == 'u' or c == 'y')
+		if not lastvowel and vowel:
 			syl += 1
+		lastvowel = vowel
+
 	if syl == 0:
 		syl = 1
 	return syl
@@ -84,6 +94,6 @@ class Haiku(XMPPModule):
 			s = haiku(msg['body'], form)
 			if s:
 				reply = make_poem(s)
-				reply = msg['from'].bare + ', I proffer that your prose is a poem, a ' + name + ':\n' + reply
+				reply = 'I proffer that your prose is a poem, a ' + name + ':\n' + reply
 				self.xmpp.reply(msg, reply)
 
