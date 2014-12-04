@@ -63,7 +63,10 @@ class Bot(ClientXMPP):
 			if f[-2:] != "py":
 				continue
 			file,pathname,description = imp.find_module("./modules/" + f[:-3])
-			mods.append(imp.load_module(f[:-3],file,pathname,description))
+			try:
+				mods.append(imp.load_module(f[:-3],file,pathname,description))
+			except Exception as e:
+				print(e)
 
 		for m in mods:
 			for name, obj in inspect.getmembers(m):
