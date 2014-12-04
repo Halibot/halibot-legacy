@@ -99,7 +99,7 @@ class Haiku(XMPPModule):
 				reply  += w + ': ' + c
 			self.xmpp.reply(msg, reply)
 		else:
-			for pair in forms:
+			for pair in self.forms:
 				name = pair['name']
 				form = pair['form']
 				s = haiku(msg['body'], form)
