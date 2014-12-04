@@ -17,8 +17,12 @@ class XMPPModule():
 
 	# Called when a message is received. Passes in whole message object
 	def recvMsg(self, msg):
-		pass
+		self.handleMessage(msg)
 
 	# Called when a group message is received, useful for early separation
 	def recvGroupMsg(self, msg):
+		self.handleMessage(msg)
+
+	# Default, handle all messages the same
+	def handleMessage(self, msg):
 		pass
