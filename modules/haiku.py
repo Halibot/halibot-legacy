@@ -76,11 +76,12 @@ def make_poem(stanza):
 	return formed
 
 class Haiku(XMPPModule):
-	def handleMessage(self, msg):
+	def __init__(self, xmpp):
+		XMPPModule.__init__(self, xmpp)
 		if 'haiku' in self.xmpp.config.keys():
-			forms = self.xmpp.config['haiku']['forms']
+			self.forms = self.xmpp.config['haiku']['forms']
 		else:
-			forms = [{
+			self.forms = [{
 				'name': 'haiku',
 				'form': [5, 7, 5]
 			}, {
@@ -88,12 +89,22 @@ class Haiku(XMPPModule):
 				'form': [5, 7, 5, 7, 7]
 			}]
 
-		for pair in forms:
-			name = pair['name']
-			form = pair['form']
-			s = haiku(msg['body'], form)
-			if s:
-				reply = make_poem(s)
-				reply = 'I proffer that your prose is a poem, a ' + name + ':\n' + reply
-				self.xmpp.reply(msg, reply)
+	def handleMessage(self, msg):
+		if msg['body'][0:8] == '!sylcnt ':
+			words = msg['body'][8:].split(' ')
+			reply = ''
+			for w in words:
+				w = clean(w)
+				c = sylcnt(w)
+				reply  += w + ': ' + c
+			self.xmpp.reply(msg, reply)
+		else:
+			for pair in forms:
+				name = pair['name']
+				form = pair['form']
+				s = haiku(msg['body'], form)
+				if s:
+					reply = make_poem(s)
+					reply = 'I proffer that your prose is a poem, a ' + name + ':\n' + reply
+					self.xmpp.reply(msg, reply)
 
