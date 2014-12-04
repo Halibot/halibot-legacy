@@ -4,15 +4,22 @@ from module import XMPPModule
 def sylcnt(word):
 	lastvowel = False
 	syl = 0
-	l = len(word)
+
+	exceptions = {
+		'maybe': 2,
+		'something': 2
+	}
+
+	if word in exceptions:
+		return exceptions[word]
 
 	# remove e, es from end of words
-	if word[l - 1] == 'e':
-		word = word[0:l - 1]
-	elif word[l - 2:] == 'es':
-		word = word[0:l - 2]
+	if word[-1] == 'e':
+		word = word[0:-1]
+	elif word[-2:] == 'es':
+		word = word[1:-2]
 
-	for i in range(l):
+	for i in range(len(word)):
 		c = word[i]
 		vowel = (c == 'a' or c == 'e' or c == 'i' or c == 'o' or c == 'u' or c == 'y')
 		if not lastvowel and vowel:
@@ -93,10 +100,15 @@ class Haiku(XMPPModule):
 		if msg['body'][0:8] == '!sylcnt ':
 			words = msg['body'][8:].split(' ')
 			reply = ''
+			first = True
 			for w in words:
+				if first:
+					first = False
+				else:
+					reply += '\n'
 				w = clean(w)
 				c = sylcnt(w)
-				reply  += w + ': ' + c
+				reply  += w + ': ' + str(c)
 			self.xmpp.reply(msg, reply)
 		else:
 			for pair in self.forms:

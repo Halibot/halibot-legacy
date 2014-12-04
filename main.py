@@ -23,7 +23,7 @@ def loadConfig():
 	with open("config.json","r") as f:
 		data = json.loads(f.read())
 
-	admins = data["admins"] if "admins" in data.keys() else []	
+	admins = data["admins"] if "admins" in data.keys() else []
 	pwd = getpass.getpass()
 	jid = data["jid"] if "jid" in data.keys() else None # TODO: Make this an error
 	rooms = []
@@ -41,9 +41,7 @@ class Bot(ClientXMPP):
 
 	def __init__(self, jid, password, rooms):
 		ClientXMPP.__init__(self,jid,password)
-	
-		self.load_modules()
-	
+
 		self.rooms = rooms
 
 		self.add_event_handler("session_start", self.session_start)
@@ -53,13 +51,15 @@ class Bot(ClientXMPP):
 		with open("config.json", "r") as f:
 			self.config = json.loads(f.read())
 
+		self.load_modules()
+
 
 	def load_modules(self):
 		# TODO: Put this dir in config?
 		self.modules = []
 		mods = []
 		names = []
-		for f in os.listdir("./modules"): 
+		for f in os.listdir("./modules"):
 			if f[-2:] != "py":
 				continue
 			file,pathname,description = imp.find_module("./modules/" + f[:-3])
@@ -71,7 +71,7 @@ class Bot(ClientXMPP):
 		for m in mods:
 			for name, obj in inspect.getmembers(m):
 				if inspect.isclass(obj) and issubclass(obj,XMPPModule) and name != "XMPPModule":
-					self.modules.append(obj(self))	
+					self.modules.append(obj(self))
 					names.append(name)
 		return names
 
@@ -79,7 +79,7 @@ class Bot(ClientXMPP):
 		self.send_presence()
 		for r in self.rooms:
 			self.plugin['xep_0045'].joinMUC(r[0], r[1], wait=True)
-		
+
 		# self.get_roster()
 
 	def message(self, msg):
@@ -107,7 +107,7 @@ class Bot(ClientXMPP):
 
 	def sendGroupMsg(self, to, text):
 		self.send_message(mto=to, mbody=text, mtype="groupchat")
-	
+
 	def reply(self, msg, string):
 		if msg['type'] in ("chat", "normal"):
 			self.sendMsg(msg['from'].bare, string)
@@ -118,7 +118,7 @@ class Bot(ClientXMPP):
 
 if __name__ == '__main__':
 	logging.basicConfig(level=logging.INFO, format='%(levelname)-8s %(message)s')
-	
+
 	jid,pwd,rooms = loadConfig()
 
 	xmpp = Bot(jid, pwd, rooms)
