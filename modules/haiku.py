@@ -58,7 +58,7 @@ def make_poem(stanza):
 		first = True
 		for word in line:
 			if first:
-				formed = word[0].upper() + word[1:]
+				formed += word[0].upper() + word[1:]
 				first = False
 			else:
 				formed += ' ' + word
@@ -82,7 +82,8 @@ class Haiku(XMPPModule):
 			name = pair['name']
 			form = pair['form']
 			s = haiku(msg['body'], form)
-			reply = make_poem(s)
-			reply = msg['from'] + ', I proffer that your prose is a poem, a ' + name + ':\n' + reply
-			self.xmpp.reply(msg, reply)
+			if s:
+				reply = make_poem(s)
+				reply = msg['from'].bare + ', I proffer that your prose is a poem, a ' + name + ':\n' + reply
+				self.xmpp.reply(msg, reply)
 
