@@ -5,7 +5,6 @@ class Xkcd(XMPPModule):
 	def handleMessage(self, msg):
 		if msg['body'].split(' ')[0] == '!xkcd':
 			string = ' '.join(msg['body'].split(' ')[1:])
-			print(string)
 
 			if string == 'today':
 				r = requests.get("http://xkcd.com/info.0.json")
