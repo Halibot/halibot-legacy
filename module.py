@@ -26,3 +26,8 @@ class XMPPModule():
 	# Default, handle all messages the same
 	def handleMessage(self, msg):
 		pass
+
+	# Default help method
+	def help(bloop):
+		return 'This module does not implement a help method.'
+

@@ -96,6 +96,22 @@ class Haiku(XMPPModule):
 				'form': [5, 7, 5, 7, 7]
 			}]
 
+	def help(self, feature):
+		if feature == 'sylcnt':
+			return 'sylcnt: Counts syllables in words as a debug tool.\nusage: !sylcnt [words...]'
+		if feature == None:
+			s = 'haiku:\n'
+			s += 'This module makes poems\n'
+			s += 'When your words are in poem form\n'
+			s += 'Quite many forms there are\n\n'
+			s += 'Poems recognized: '
+			s += ', '.join([p['name'] for p in self.forms])
+			return s
+		for p in self.forms:
+			if feature == p['name']:
+				return p['name'] + 's are of the form ' + ', '.join([str(i) for i in p['form']])
+		return 'There is no such poem to my knownledge.'
+
 	def handleMessage(self, msg):
 		if msg['body'][0:8] == '!sylcnt ':
 			words = msg['body'][8:].split(' ')
