@@ -11,45 +11,35 @@ from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError, IqTimeout
 from module import XMPPModule
 
-admins = []
 
 import sys
 sys.path.append(".")
 import module
 
 
-def loadConfig():
-	global admins
-	with open("config.json","r") as f:
-		data = json.loads(f.read())
-
-	admins = data["admins"] if "admins" in data.keys() else []
-	pwd = getpass.getpass()
-	jid = data["jid"] if "jid" in data.keys() else None # TODO: Make this an error
-	rooms = []
-	if "muc" in data.keys():
-		for r in data["muc"]:
-			rooms.append((r["room"],r["nick"]))
-	return (jid,pwd,rooms)
-
-
-
 class Bot(ClientXMPP):
 
+	jid = ""
+	rooms = []
 	modules = []
 	config = None
 
-	def __init__(self, jid, password, rooms):
-		ClientXMPP.__init__(self,jid,password)
+	def __init__(self):
+		with open("config.json","r") as f:
+			self.config = json.loads(f.read())
 
-		self.rooms = rooms
+		pwd = getpass.getpass()
+		self.jid = self.config["jid"] if "jid" in self.config.keys() else None # TODO: Make this an error
+
+		if "muc" in self.config.keys():
+			for r in self.config["muc"]:
+				self.rooms.append((r["room"],r["nick"]))
+
+		ClientXMPP.__init__(self,self.jid,pwd)
 
 		self.add_event_handler("session_start", self.session_start)
 		self.add_event_handler("message", self.message)
 		self.add_event_handler("groupchat_message", self.groupmsg)
-
-		with open("config.json", "r") as f:
-			self.config = json.loads(f.read())
 
 		self.load_modules()
 
@@ -119,9 +109,7 @@ class Bot(ClientXMPP):
 if __name__ == '__main__':
 	logging.basicConfig(level=logging.INFO, format='%(levelname)-8s %(message)s')
 
-	jid,pwd,rooms = loadConfig()
-
-	xmpp = Bot(jid, pwd, rooms)
+	xmpp = Bot()
 	xmpp.register_plugin('xep_0045')
 	xmpp.connect()
 	xmpp.process(block=True)
