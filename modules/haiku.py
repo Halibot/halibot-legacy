@@ -97,15 +97,23 @@ class Haiku(XMPPModule):
 			}]
 
 	def help(self, feature):
-		if feature == 'sylcnt':
-			return 'sylcnt: Counts syllables in words as a debug tool.\nusage: !sylcnt [words...]'
+		if feature == 'sylcnt' or feature == '!syscnt':
+			return '''
+Counts syllables in words as a debug tool.
+usage: !sylcnt [words...]
+'''
 		if feature == None:
-			s = 'haiku:\n'
-			s += 'This module makes poems\n'
-			s += 'When your words are in poem form\n'
-			s += 'Quite many forms there are\n\n'
-			s += 'Poems recognized: '
-			s += ', '.join([p['name'] for p in self.forms])
+			s = '''
+This module makes poems.
+When your words are in poem form.
+Quite many forms there are.
+
+Debug subfeatures:
+ syscnt
+
+Poems recognized ("!help haiku [form]" for more information):
+'''
+			s += '\n'.join([' ' + p['name'] for p in self.forms])
 			return s
 		for p in self.forms:
 			if feature == p['name']:
