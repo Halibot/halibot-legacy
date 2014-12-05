@@ -51,6 +51,10 @@ class Bot(ClientXMPP):
 				self.rooms.append((r["room"],r["nick"]))
 				self.mucusers[r["room"]] = {}
 
+	def write_config(self):
+		with open("config.json", "w") as f:
+			f.write(json.dumps(self.config, indent=4, sort_keys=True))
+
 	def load_modules(self):
 		# TODO: Put this dir in config?
 		self.modules = []
@@ -67,7 +71,7 @@ class Bot(ClientXMPP):
 
 		for m in mods:
 			for name, obj in inspect.getmembers(m):
-				if inspect.isclass(obj) and issubclass(obj,XMPPModule) and name != "XMPPModule":
+				if inspect.isclass(obj) and issubclass(obj,XMPPModule) and name != "XMPPModule" and name in self.config["modules"]:
 					self.modules.append(obj(self))
 					names.append(name)
 		return names
