@@ -23,7 +23,6 @@ Set a custom greeting for yourself when you join the chatroom.
 		for r in self.xmpp.rooms:
 			self.greetings[r[0]] = {}
 
-		print(self.greetings)
 	def handleMucPresence(self, presence):
 		if "join" not in presence['id']:
 			return
