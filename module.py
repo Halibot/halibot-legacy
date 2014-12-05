@@ -27,6 +27,10 @@ class XMPPModule():
 	def handleMessage(self, msg):
 		pass
 
+	# Put some functionality on users sending a presence to a MUC
+	def handleMucPresence(self, presence):
+		pass
+
 	# Default help method
 	def help(bloop):
 		return 'This module does not implement a help method.'

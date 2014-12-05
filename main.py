@@ -80,6 +80,12 @@ class Bot(ClientXMPP):
 		if presence['muc']['jid'] == self.jid:
 			return
 		self.mucusers[presence['muc']['room']][presence['muc']['nick']] = presence['muc']['jid'].bare
+		
+		for m in self.modules:
+			try:
+				m.handleMucPresence(presence)
+			except Exception as e:
+				print(e)
 
 	def session_start(self, event):
 		self.send_presence()
