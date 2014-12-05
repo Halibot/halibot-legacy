@@ -56,3 +56,23 @@ class Quotes(XMPPModule):
 		"!reloadquotes":loadquotes
 	}
 
+	def help(self, feature):
+		if feature in ["!quote", "quote"]:
+			return '''
+Usage: !quote [string]
+
+Respond with a random quote from "quotes.txt". Providing an optional string reduces the pool to only quotes containing that substring.
+'''
+		elif feature in ["!quoteadd", "quoteadd"]:
+			return '''
+Usage !quoteadd <string>
+
+Add the <string> to the internal list of quotes. Note, this does not persist if the module is reloaded. Be sure to !writequotes to persist new quotes!
+'''
+
+		return '''
+Fill your chat with random quotes from a file.
+ Features:
+   !quote    - Print a random quote
+   !quoteadd - Add a quote to the internal quote database
+'''

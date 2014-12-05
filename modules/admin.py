@@ -18,3 +18,10 @@ class Admin(XMPPModule):
 	def recvGroupMsg(self, msg):
 		if msg['body'] == "Hello World!":
 			self.xmpp.sendGroupMsg(msg['from'].bare, "Hello World!")
+
+	def help(self, feature):
+		if feature == None:
+			return '''
+Admin module provides methods to manage the Bot while it is live.
+ Features:
+   !reloadmodules - Stop all modules, and reload all enabled modules'''

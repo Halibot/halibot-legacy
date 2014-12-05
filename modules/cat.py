@@ -38,8 +38,25 @@ class Cat(XMPPModule):
 		if reply:
 			self.xmpp.reply(msg, reply)
 
+	def help(self, feature):
+		if feature in ["!cat", "cat"]:
+			return '''Usage: !cat [jpg | png | gif]
+
+Reply with a link to a cat picture. Provide any of the three optional arguments to specify the file type.
+'''
+		elif feature in ["!catfact", "catfact"]:
+			return '''Usage: !catfact
+
+Reply with a random catfact. That is all.
+'''
+		return '''
+Because all XMPP servers need cats!
+ Features:
+   !cat     - Display a link to a random cat picture
+   !catfact - Print a random cat fact!
 	recvMsg = handleMessage
 	recvGroupMsg = handleMessage
+'''
 
 commands = {
 	"!cat":cat,
