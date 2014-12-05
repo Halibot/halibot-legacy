@@ -19,6 +19,8 @@ class Quotes(XMPPModule):
 		cmd, string = (msg['body'].split(' ',1)[0], " ".join(msg['body'].split(' ',1)[1:]))
 		if cmd in self.commands.keys():
 			self.xmpp.reply(msg, self.commands[cmd](self,string))
+		elif cmd in self.admincommands.keys() and self.xmpp.isadmin(msg=msg):
+			self.xmpp.reply(msg, self.admincommands[cmd](self, string))
 
 	def quote_handler(self, string):
 		if len(self.quotes) == 0:

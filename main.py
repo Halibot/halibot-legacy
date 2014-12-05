@@ -118,8 +118,14 @@ class Bot(ClientXMPP):
 		else:
 			print("Error replying")
 
-	def isadmin(self, jid=None, nick=None, room=None):
-		if jid:
+	def isadmin(self, jid=None, nick=None, room=None, msg=None):
+		if msg:
+			if "mucnick" in msg.keys():
+				name = self.mucusers[msg['mucroom']][msg["mucnick"]]
+			else:
+				name = msg["jid"]
+	
+		elif jid:
 			name = jid
 		elif nick and room:
 			name = self.mucusers[room][nick]
