@@ -100,25 +100,24 @@ class Haiku(XMPPModule):
 		if feature == 'sylcnt' or feature == '!syscnt':
 			return '''
 Counts syllables in words as a debug tool.
+
 usage: !sylcnt [words...]
 '''
-		if feature == None:
-			s = '''
+		for p in self.forms:
+			if feature == p['name']:
+				return p['name'] + 's are of the form ' + ', '.join([str(i) for i in p['form']])
+		s = '''
 This module makes poems.
 When your words are in poem form.
 Quite many forms there are.
 
 Debug subfeatures:
- syscnt
+ sylcnt
 
 Poems recognized ("!help haiku [form]" for more information):
 '''
-			s += '\n'.join([' ' + p['name'] for p in self.forms])
-			return s
-		for p in self.forms:
-			if feature == p['name']:
-				return p['name'] + 's are of the form ' + ', '.join([str(i) for i in p['form']])
-		return 'There is no such poem to my knownledge.'
+		s += '\n'.join([' ' + p['name'] for p in self.forms])
+		return s + '\n'
 
 	def handleMessage(self, msg):
 		if msg['body'][0:8] == '!sylcnt ':
