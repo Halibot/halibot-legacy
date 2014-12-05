@@ -1,7 +1,14 @@
 from module import XMPPModule
 import requests
 
-class Xkcd(XMPPModule):
+class Ddg(XMPPModule):
+	def help(self, feature):
+		return '''
+Searches DuckDuckGo for a phrase.
+
+usage: !ddg [phrase...]
+'''
+
 	def handleMessage(self, msg):
 		if msg['body'].split(' ')[0] == '!ddg':
 			string = ' '.join(msg['body'].split(' ')[1:])

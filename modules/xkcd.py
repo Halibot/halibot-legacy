@@ -2,6 +2,14 @@ from module import XMPPModule
 import requests
 
 class Xkcd(XMPPModule):
+	def help(self, feature):
+		return '''
+Links to XKCD and stuff. Not very useful, really.
+
+usage: !xkcd today
+usage: !xkcd [number]
+'''
+
 	def handleMessage(self, msg):
 		if msg['body'].split(' ')[0] == '!xkcd':
 			string = ' '.join(msg['body'].split(' ')[1:])
