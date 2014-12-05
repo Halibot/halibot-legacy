@@ -23,8 +23,7 @@ class Bot(ClientXMPP):
 	rooms = []
 	modules = []
 	config = None
-	admin = []
-
+	mucusers = {}
 
 	def __init__(self, pwd):
 		self.load_config()
@@ -34,6 +33,8 @@ class Bot(ClientXMPP):
 		self.add_event_handler("session_start", self.session_start)
 		self.add_event_handler("message", self.message)
 		self.add_event_handler("groupchat_message", self.groupmsg)
+		self.add_event_handler("groupchat_presence", self.muc_presence)
+
 
 		self.load_modules()
 
@@ -44,11 +45,11 @@ class Bot(ClientXMPP):
 
 		self.jid = self.config["jid"] if "jid" in self.config.keys() else None # TODO: Make this an error
 
+		self.rooms = []
 		if "muc" in self.config.keys():
 			for r in self.config["muc"]:
 				self.rooms.append((r["room"],r["nick"]))
-
-
+				self.mucusers[r["room"]] = {}
 
 	def load_modules(self):
 		# TODO: Put this dir in config?
@@ -70,6 +71,11 @@ class Bot(ClientXMPP):
 					self.modules.append(obj(self))
 					names.append(name)
 		return names
+
+	def muc_presence(self, presence):
+		if presence['muc']['jid'] == self.jid:
+			return
+		self.mucusers[presence['muc']['room']][presence['muc']['nick']] = presence['muc']['jid'].bare
 
 	def session_start(self, event):
 		self.send_presence()
@@ -112,8 +118,18 @@ class Bot(ClientXMPP):
 		else:
 			print("Error replying")
 
+	def isadmin(self, jid=None, nick=None, room=None):
+		if jid:
+			name = jid
+		elif nick and room:
+			name = self.mucusers[room][nick]
+		else:
+			print("isadmin check failed")
+			raise Exception("Improper use of isadmin")
+		return name in self.config["admins"]
+
 if __name__ == '__main__':
-	logging.basicConfig(level=logging.DEBUG, format='%(levelname)-8s %(message)s')
+	logging.basicConfig(level=logging.INFO, format='%(levelname)-8s %(message)s')
 
 	xmpp = Bot(getpass.getpass())
 	xmpp.register_plugin('xep_0045')

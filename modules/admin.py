@@ -1,23 +1,25 @@
 from module import XMPPModule
 
-def relmod(xmpp, to):
-	mods = xmpp.load_modules()
-	xmpp.sendMsg(to, "Modules reloaded successfully! Registered modules: " + ", ".join(mods))
-
 class Admin(XMPPModule):
 	
-	commands = {
-		"!reloadmodules":relmod
-	}
-
 	def recvMsg(self, msg):
-		if msg['body'].split(" ")[0] in self.commands.keys():
-			self.commands[msg['body'].split(" ")[0]](self.xmpp, msg['from'].bare)
-			
+		if self.xmpp.isadmin(jid=msg["from"].bare):
+			self.handleMessage(msg)
+		else:
+			return
 
 	def recvGroupMsg(self, msg):
-		if msg['body'] == "Hello World!":
-			self.xmpp.sendGroupMsg(msg['from'].bare, "Hello World!")
+		if self.xmpp.isadmin(room=msg["from"].bare, nick=msg["mucnick"]):
+			self.handleMessage(msg)
+		else:
+			return
+	
+	def handleMessage(self, msg):
+		cmd, string = (msg["body"].split(" ")[0], " ".join(msg["body"].split(" ")[1:]))
+		
+		if cmd == "!reloadmodules":
+			mods = self.xmpp.load_modules()
+			self.xmpp.reply(msg, "Modules reloaded successfully! Registered modules: " + ", ".join(mods))
 
 	def help(self, feature):
 		if feature == None:
