@@ -23,17 +23,11 @@ class Bot(ClientXMPP):
 	rooms = []
 	modules = []
 	config = None
+	admin = []
 
-	def __init__(self):
-		with open("config.json","r") as f:
-			self.config = json.loads(f.read())
 
-		pwd = getpass.getpass()
-		self.jid = self.config["jid"] if "jid" in self.config.keys() else None # TODO: Make this an error
-
-		if "muc" in self.config.keys():
-			for r in self.config["muc"]:
-				self.rooms.append((r["room"],r["nick"]))
+	def __init__(self, pwd):
+		self.load_config()
 
 		ClientXMPP.__init__(self,self.jid,pwd)
 
@@ -42,6 +36,18 @@ class Bot(ClientXMPP):
 		self.add_event_handler("groupchat_message", self.groupmsg)
 
 		self.load_modules()
+
+
+	def load_config(self):
+		with open("config.json","r") as f:
+			self.config = json.loads(f.read())
+
+		self.jid = self.config["jid"] if "jid" in self.config.keys() else None # TODO: Make this an error
+
+		if "muc" in self.config.keys():
+			for r in self.config["muc"]:
+				self.rooms.append((r["room"],r["nick"]))
+
 
 
 	def load_modules(self):
@@ -107,9 +113,9 @@ class Bot(ClientXMPP):
 			print("Error replying")
 
 if __name__ == '__main__':
-	logging.basicConfig(level=logging.INFO, format='%(levelname)-8s %(message)s')
+	logging.basicConfig(level=logging.DEBUG, format='%(levelname)-8s %(message)s')
 
-	xmpp = Bot()
+	xmpp = Bot(getpass.getpass())
 	xmpp.register_plugin('xep_0045')
 	xmpp.connect()
 	xmpp.process(block=True)
