@@ -7,7 +7,7 @@ class Spell(XMPPModule):
 		XMPPModule.__init__(self, xmpp)
 
 		spell = xmpp.config.get('spell')
-		self.aggro = (spell and spell.get('aggro')) or True
+		self.aggro = (spell and spell.get('aggro')) or False
 		self.lang = (spell and spell.get('lang')) or 'en'
 
 		self.rgx = re.compile(r"[^a-zA-Z']")
