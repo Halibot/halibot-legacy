@@ -30,6 +30,27 @@ def handle_cowsay(string):
 
 
 class Toys(XMPPModule):
+	def help(self, feature):
+		if feature in ['cowsay', '!cowsay']:
+			return '''
+A cowfigurable cow to play with.
+
+usage: !cowsay [arguments to cowsay]
+usage: !cowsay !fortune
+'''
+		if feature in ['fortune', '!fortune']:
+			return '''
+Forsees the future.
+
+usage: !fortune
+'''
+		return '''
+A modules to provides some nice toys to play with.
+
+Module features:
+ cowsay  - A configurable cow to play with.
+ fortune - Forsees the future.
+'''
 
 	def handleMessage(self, msg):
 		command, string = (msg['body'].split(" ")[0]," ".join(msg['body'].split(' ')[1:]))
