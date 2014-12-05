@@ -31,7 +31,7 @@ class Cat(XMPPModule):
 	
 	def handleMessage(self, msg):
 		if msg['body'].split(" ")[0] in commands.keys():
-			reply = commands[msg['body'].split(" ")[0]](msg['body'].split(" ")[1:])
+			reply = commands[msg['body'].split(" ")[0]](" ".join(msg['body'].split(" ")[1:]))
 		else:
 			return
 
