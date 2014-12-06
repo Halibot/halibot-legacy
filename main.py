@@ -22,8 +22,7 @@ class Bot(ClientXMPP):
 
 	jid = ""
 	rooms = []
-	modules = []
-	module_dict = {}
+	modules = None
 	modavail = []
 	config = None
 	mucusers = {}
