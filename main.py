@@ -10,6 +10,7 @@ import getpass
 from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError, IqTimeout
 from module import XMPPModule
+from collections import OrderedDict
 
 
 import sys
@@ -59,11 +60,10 @@ class Bot(ClientXMPP):
 
 	def load_modules(self):
 		# TODO: Put this dir in config?
-		self.modules = []
+		self.modules = None
 		self.modavail = []
-		self.module_dict = {}
 		mods = []
-		names = []
+		modules = []
 		for f in os.listdir("./modules"):
 			if f[-2:] != "py":
 				continue
@@ -77,21 +77,18 @@ class Bot(ClientXMPP):
 			for name, obj in inspect.getmembers(m):
 				if inspect.isclass(obj) and issubclass(obj,XMPPModule) and name != "XMPPModule":
 					if name in self.config["modules"]:
-						o = obj(self)
-						self.modules.append(o)
-						names.append(name)
-						self.module_dict[name] = o
+						modules.append( (name, obj(self)) )
 					self.modavail.append(name)
-		self.modules = sorted(self.modules, key=lambda x: x.priority)
+		self.modules = OrderedDict(sorted(modules, key=lambda x: x[1].priority))
 
-		return names
+		return self.modules.keys()
 
 	def muc_presence(self, presence):
 		if presence['muc']['jid'] == self.jid:
 			return
 		self.mucusers[presence['muc']['room']][presence['muc']['nick']] = presence['muc']['jid'].bare
 		
-		for m in self.modules:
+		for m in self.modules.values():
 			try:
 				m.handleMucPresence(presence)
 			except Exception as e:
@@ -108,7 +105,7 @@ class Bot(ClientXMPP):
 		if msg['type'] not in ('chat', 'normal'):
 			return
 
-		for m in self.modules:
+		for m in self.modules.values():
 			try:
 				m.recvMsg(msg)
 				if m.terminate:
@@ -121,7 +118,7 @@ class Bot(ClientXMPP):
 		if msg['type'] not in ("groupchat") or msg['mucnick'] in [n[1] for n in self.rooms]:
 			return
 
-		for m in self.modules:
+		for m in self.modules.values():
 			try:
 				m.recvGroupMsg(msg)
 				if m.terminate:

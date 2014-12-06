@@ -1,8 +1,5 @@
 from module import XMPPModule
 
-def topLevel(xmpp):
-	s = 'halibot help module\n\nUsage: !help [module] [feature]\n\nModules loaded: '
-	return s + ", ".join([m.__class__.__name__ for m in xmpp.modules])
 
 class Help(XMPPModule):
 	def help(self, feature):
@@ -14,13 +11,13 @@ class Help(XMPPModule):
 		cmds = msg['body'].split(' ')
 		if cmds[0] == '!help':
 			if len(cmds) == 1:
-				message = topLevel(self.xmpp)
+				message = self.topLevel()
 			else:
 				mod = None
-				for m in self.xmpp.modules:
-					if cmds[1].lower() == m.__class__.__name__.lower():
-						mod = m
-						break
+				cmds[1] = cmds[1].capitalize()
+				if cmds[1] in self.xmpp.modules:
+					mod = self.xmpp.modules[cmds[1]]
+
 				if mod:
 					if len(cmds) == 2:
 						message = mod.help(None)
@@ -30,3 +27,6 @@ class Help(XMPPModule):
 					message = 'There is no such module loaded.'
 			self.xmpp.reply(msg, message)
 
+	def topLevel(self):
+		s = 'halibot help module\n\nUsage: !help [module] [feature]\n\nModules loaded: '
+		return s + ", ".join(self.xmpp.modules.keys())
