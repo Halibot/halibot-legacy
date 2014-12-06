@@ -19,7 +19,7 @@ class Dorp(XMPPModule):
 		if not r.ok:
 			return "There was an error getting dorp status"
 
-		m = r.search(r.text)
+		m = self.regex.search(r.text)
 		if not m:
 			return "There was an error parsing the HTML"
 
