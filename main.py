@@ -22,6 +22,7 @@ class Bot(ClientXMPP):
 	jid = ""
 	rooms = []
 	modules = []
+	module_dict = {}
 	modavail = []
 	config = None
 	mucusers = {}
@@ -60,6 +61,7 @@ class Bot(ClientXMPP):
 		# TODO: Put this dir in config?
 		self.modules = []
 		self.modavail = []
+		self.module_dict = {}
 		mods = []
 		names = []
 		for f in os.listdir("./modules"):
@@ -75,8 +77,10 @@ class Bot(ClientXMPP):
 			for name, obj in inspect.getmembers(m):
 				if inspect.isclass(obj) and issubclass(obj,XMPPModule) and name != "XMPPModule":
 					if name in self.config["modules"]:
-						self.modules.append(obj(self))
+						o = obj(self)
+						self.modules.append(o)
 						names.append(name)
+						self.module_dict[name] = o
 					self.modavail.append(name)
 		self.modules = sorted(self.modules, key=lambda x: x.priority)
 
