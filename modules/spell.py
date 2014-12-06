@@ -3,6 +3,9 @@ from aspell import Speller
 import re
 
 class Spell(XMPPModule):
+
+	priority = 40
+
 	def __init__(self, xmpp):
 		XMPPModule.__init__(self, xmpp)
 
