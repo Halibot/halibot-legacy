@@ -4,10 +4,6 @@ import requests
 
 class Dorp(XMPPModule):
 	
-	def __init__(self, xmpp):
-		XMPPModule.__init__(self, xmpp)
-		self.regex = re.compile("Door:\\t(.)")
-
 	def handleMessage(self, msg):
 		cmd, args = halutils.splitArgStr(msg)
 		if cmd == "!dorp":
