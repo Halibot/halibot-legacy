@@ -1,7 +1,6 @@
 from module import XMPPModule
 import halutils
 import requests
-import re
 
 class Dorp(XMPPModule):
 	
@@ -15,18 +14,10 @@ class Dorp(XMPPModule):
 			self.xmpp.reply(msg, self.getDorp())
 
 	def getDorp(self):
-		r = requests.get("http://k2cc.clarkson.edu:8080")
+		r = requests.get("http://k2cc.clarkson.edu:8080/get")
 		if not r.ok:
 			return "There was an error getting dorp status"
 
-		m = self.regex.search(r.text)
-		if not m:
-			return "There was an error parsing the HTML"
-
-		if m.group(1) == "✘":
-			return "K2CC is closed :("
-		else:
-			return "K2CC is open :D"
-
+		return "The K2CC door is {door} and the light is {light}".format(**r.json())
 
 		
