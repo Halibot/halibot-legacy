@@ -32,6 +32,6 @@ class XMPPModule():
 		pass
 
 	# Default help method
-	def help(bloop):
+	def help(self, bloop):
 		return 'This module does not implement a help method.'
 

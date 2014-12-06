@@ -22,6 +22,7 @@ class Bot(ClientXMPP):
 	jid = ""
 	rooms = []
 	modules = []
+	modavail = []
 	config = None
 	mucusers = {}
 
@@ -58,6 +59,7 @@ class Bot(ClientXMPP):
 	def load_modules(self):
 		# TODO: Put this dir in config?
 		self.modules = []
+		self.modavail = []
 		mods = []
 		names = []
 		for f in os.listdir("./modules"):
@@ -71,9 +73,11 @@ class Bot(ClientXMPP):
 
 		for m in mods:
 			for name, obj in inspect.getmembers(m):
-				if inspect.isclass(obj) and issubclass(obj,XMPPModule) and name != "XMPPModule" and name in self.config["modules"]:
-					self.modules.append(obj(self))
-					names.append(name)
+				if inspect.isclass(obj) and issubclass(obj,XMPPModule) and name != "XMPPModule":
+					if name in self.config["modules"]:
+						self.modules.append(obj(self))
+						names.append(name)
+					self.modavail.append(name)
 		return names
 
 	def muc_presence(self, presence):

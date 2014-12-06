@@ -1,7 +1,7 @@
 from module import XMPPModule
 
 class Admin(XMPPModule):
-	
+
 	def recvMsg(self, msg):
 		if self.xmpp.isadmin(jid=msg["from"].bare):
 			self.handleMessage(msg)
@@ -13,10 +13,9 @@ class Admin(XMPPModule):
 			self.handleMessage(msg)
 		else:
 			return
-	
+
 	def handleMessage(self, msg):
 		cmd, string = (msg["body"].split(" ")[0], " ".join(msg["body"].split(" ")[1:]))
-		
 		if cmd == "!reloadmodules":
 			mods = self.xmpp.load_modules()
 			self.xmpp.reply(msg, "Modules reloaded successfully! Registered modules: " + ", ".join(mods))
