@@ -112,7 +112,7 @@ usage: !config get [key path1] [key path2] ...
 			return '''
 Sets a key path to a value in the halibot config.
 
-usage: !config set [path] [value in python syntax]
+usage: !config set [path] [json value]
 '''
 		if feature in ['write', '!write']:
 			return '''
