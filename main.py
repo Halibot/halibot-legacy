@@ -78,6 +78,8 @@ class Bot(ClientXMPP):
 						self.modules.append(obj(self))
 						names.append(name)
 					self.modavail.append(name)
+		self.modules = sorted(self.modules, key=lambda x: x.priority)
+
 		return names
 
 	def muc_presence(self, presence):
@@ -105,6 +107,9 @@ class Bot(ClientXMPP):
 		for m in self.modules:
 			try:
 				m.recvMsg(msg)
+				if m.terminate:
+					m.terminate = False
+					return
 			except Exception as e:
 				print(e)
 
@@ -115,6 +120,9 @@ class Bot(ClientXMPP):
 		for m in self.modules:
 			try:
 				m.recvGroupMsg(msg)
+				if m.terminate:
+					m.terminate = False
+					return
 			except Exception as e:
 				print(e)
 

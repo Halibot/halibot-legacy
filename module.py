@@ -1,6 +1,8 @@
 class XMPPModule():
 	xmpp = None
 	threadfunc = None
+	priority = 0
+	terminate = False
 
 
 	# Initialize the module, start any passive threads here
