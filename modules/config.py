@@ -1,4 +1,5 @@
 from module import XMPPModule
+import json
 
 class Config(XMPPModule):
 	def __init__(self, xmpp):
@@ -54,7 +55,7 @@ class Config(XMPPModule):
 			t.pop(k, None)
 		else:
 			try:
-				t[k] = eval(' '.join(args[1:]))
+				t[k] = json.loads(' '.join(args[1:]))
 			except Exception as e:
 				return str(e)
 
