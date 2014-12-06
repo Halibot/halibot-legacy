@@ -142,6 +142,9 @@ class Bot(ClientXMPP):
 		elif jid:
 			name = jid
 		elif nick and room:
+			if room not in self.mucusers.keys():
+				print("room does not exist!!")
+				raise Exception("Ya dun goofed the isadmin")
 			name = self.mucusers[room][nick]
 		else:
 			print("isadmin check failed")

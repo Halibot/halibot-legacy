@@ -23,7 +23,6 @@ Set a custom greeting for yourself when you join the chatroom.
 		for r in self.xmpp.rooms:
 			self.greetings[r[0]] = {}
 
-		print(self.greetings)
 	def handleMucPresence(self, presence):
 		if "join" not in presence['id']:
 			return
@@ -34,5 +33,11 @@ Set a custom greeting for yourself when you join the chatroom.
 	def recvGroupMsg(self, msg):
 		body = msg['body']
 		if body.startswith("!greeting"):
+			arg = body.split(" ",1)
+			if len(arg) == 1:
+				del self.greetings[msg['mucroom']][msg['mucnick']]
+				self.xmpp.reply(msg, "Removed your greeting")
+				return
+
 			self.greetings[msg['mucroom']][msg["mucnick"]] = body.split(" ",1)[1]
 			self.xmpp.reply(msg, "Greeting set!")
