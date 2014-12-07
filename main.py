@@ -142,10 +142,10 @@ class Bot(ClientXMPP):
 
 	def isadmin(self, jid=None, nick=None, room=None, msg=None):
 		if msg:
-			if "mucnick" in msg.keys():
+			if msg['type'] == "groupchat":
 				name = self.mucusers[msg['mucroom']][msg["mucnick"]]
 			else:
-				name = msg["jid"]
+				name = msg["from"].bare
 	
 		elif jid:
 			name = jid
