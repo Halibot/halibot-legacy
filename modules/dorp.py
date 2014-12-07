@@ -14,6 +14,6 @@ class Dorp(XMPPModule):
 		if not r.ok:
 			return "There was an error getting dorp status"
 
-		return "The K2CC door is {door} and the light is {light}".format(**r.json())
+		return "The K2CC door is {door} and the light is {light}.".format(**r.json())
 
 		
