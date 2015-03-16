@@ -127,7 +127,7 @@ Module features:
 			out = px("fortune",universal_newlines=True)
 		except:
 			return None
-		return out
+		return out.rstrip()
 
 	def get_pom(self):
 		if not self.pom:
