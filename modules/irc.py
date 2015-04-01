@@ -42,3 +42,6 @@ class Irc(XMPPModule):
 		name = msg['mucnick']
 
 		self.bot.on_xmpp_msg(name, string)	
+
+	def help(self, feature):
+		return '''Irc: Unifies an IRC channel and an XMPP server. All messages sent to either is relayed to the other.'''
