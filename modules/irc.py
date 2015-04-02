@@ -1,5 +1,5 @@
 from module import XMPPModule
-import pydle, threading
+import pydle, threading, halutils
 
 class IrcClient(pydle.Client):
 
@@ -11,7 +11,7 @@ class IrcClient(pydle.Client):
 
 	def on_channel_message(self, target, by, msg):
 		if msg.startswith("!list"):
-			self.message(self.module.xmpp.config['irc']['channel'], "\n" + "\n".join(self.module.xmpp.mucusers[self.module.xmpp.config['irc']['muc']].keys()))
+			self.message(self.module.xmpp.config['irc']['channel'], "\n".join(self.module.xmpp.mucusers[self.module.xmpp.config['irc']['muc']].keys()))
 			return
 
 		self.module.ircRecv(by, msg)
@@ -46,7 +46,17 @@ class Irc(XMPPModule):
 		string = msg['body']
 		name = msg['mucnick']
 
+		if string.startswith("!irc"):
+			foo, args = halutils.splitArgList(msg)
+			if args[0] == "list":
+				self.xmpp.reply(msg, "\n" + "\n".join(self.bot.channels[self.xmpp.config['irc']['channel']]['users']))
+			return
+
+
 		self.bot.on_xmpp_msg(name, string)	
 
 	def help(self, feature):
-		return '''Irc: Unifies an IRC channel and an XMPP server. All messages sent to either is relayed to the other.'''
+		return '''Irc: Unifies an IRC channel and an XMPP server. All messages sent to either is relayed to the other.
+
+Usage: Just talk, or use !irc to interact with the irc side, sorta.
+ !irc list - get a list of the nicknames on the IRC channel'''
