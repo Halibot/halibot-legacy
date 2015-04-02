@@ -20,6 +20,7 @@ class Irc(XMPPModule):
 
 	bot = None
 	thread = None
+	priority = 100
 
 	def __init__(self, xmpp):
 		XMPPModule.__init__(self, xmpp)
