@@ -30,15 +30,15 @@ class Irc(XMPPModule):
 		XMPPModule.__init__(self, xmpp)
 		self.bot = IrcClient(
 			nickname                 = self.xmpp.config['irc']['nick'],
-			tls_certificate_file     = self.xmpp.config['irc']['tls_certificate_file'],
-			tls_certificate_keyfile  = self.xmpp.config['irc']['tls_certificate_keyfile'],
-			tls_certificate_password = self.xmpp.config['irc']['tls_certificate_password']
+			tls_certificate_file     = self.xmpp.config['irc'].get('tls_certificate_file'),
+			tls_certificate_keyfile  = self.xmpp.config['irc'].get('tls_certificate_keyfile'),
+			tls_certificate_password = self.xmpp.config['irc'].get('tls_certificate_password')
 		)
 		self.bot.connect(
 			hostname   = self.xmpp.config['irc']['server'],
 			port       = self.xmpp.config['irc']['port'],
-			tls        = self.xmpp.config['irc']['tls'],
-			tls_verify = self.xmpp.config['irc']['tls_verify']
+			tls        = self.xmpp.config['irc'].get('tls'),
+			tls_verify = self.xmpp.config['irc'].get('tls_verify')
 		)
 		self.bot.module = self
 	
