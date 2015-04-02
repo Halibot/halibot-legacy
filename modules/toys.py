@@ -12,6 +12,7 @@ class Toys(XMPPModule):
 	ppt = False
 	bcd = False
 
+	terminate = True
 
 	def __init__(self, xmpp):
 		XMPPModule.__init__(self, xmpp)

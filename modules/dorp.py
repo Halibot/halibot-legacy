@@ -4,6 +4,8 @@ import requests
 
 class Dorp(XMPPModule):
 	
+	terminate = True
+
 	def handleMessage(self, msg):
 		cmd, args = halutils.splitArgStr(msg)
 		if cmd == "!dorp":

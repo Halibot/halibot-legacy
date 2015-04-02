@@ -28,6 +28,8 @@ def catfacts(string):
 	return requests.get("http://catfacts-api.appspot.com/api/facts").json()["facts"]
 
 class Cat(XMPPModule):
+
+	terminate = True
 	
 	def handleMessage(self, msg):
 		if msg['body'].split(" ")[0] in commands.keys():
