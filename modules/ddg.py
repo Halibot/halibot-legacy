@@ -3,8 +3,6 @@ import requests
 
 class Ddg(XMPPModule):
 	
-	terminate = True
-
 	def help(self, feature):
 		return '''
 Searches DuckDuckGo for a phrase.

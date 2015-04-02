@@ -2,8 +2,6 @@ from module import XMPPModule
 
 class Admin(XMPPModule):
 
-	terminate = True
-
 	def recvMsg(self, msg):
 		if self.xmpp.isadmin(jid=msg["from"].bare):
 			self.handleMessage(msg)

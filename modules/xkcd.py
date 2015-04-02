@@ -3,8 +3,6 @@ import requests
 
 class Xkcd(XMPPModule):
 	
-	terminate = True
-
 	def help(self, feature):
 		return '''
 Links to XKCD and stuff. Not very useful, really.

@@ -6,7 +6,6 @@ import os
 class Quotes(XMPPModule):
 	
 	quotes = []
-	terminate = True
 
 	def __init__(self, xmpp):
 		XMPPModule.__init__(self, xmpp)

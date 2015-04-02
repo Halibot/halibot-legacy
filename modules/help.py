@@ -3,8 +3,6 @@ from module import XMPPModule
 
 class Help(XMPPModule):
 
-	terminate = True
-
 	def help(self, feature):
 		if feature != None:
 			return 'help: There is no such subfeature to the help module.'

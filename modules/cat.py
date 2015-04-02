@@ -29,8 +29,6 @@ def catfacts(string):
 
 class Cat(XMPPModule):
 
-	terminate = True
-	
 	def handleMessage(self, msg):
 		if msg['body'].split(" ")[0] in commands.keys():
 			reply = commands[msg['body'].split(" ")[0]](" ".join(msg['body'].split(" ")[1:]))

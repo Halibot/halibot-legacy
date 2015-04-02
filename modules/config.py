@@ -3,8 +3,6 @@ import json
 
 class Config(XMPPModule):
 
-	terminate = True
-
 	def __init__(self, xmpp):
 		XMPPModule.__init__(self, xmpp)
 		if not 'modules' in self.xmpp.config:
