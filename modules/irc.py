@@ -17,7 +17,7 @@ class IrcClient(pydle.Client):
 		self.module.ircRecv(by, msg)
 
 	def on_xmpp_msg(self, user, msg):
-		self.message(self.module.xmpp.config['irc']['channel'], "<XMPP> {}: {}".format(user,msg))
+		self.message(self.module.xmpp.config['irc']['channel'], "<xmpp-{}>: {}".format(user,msg))
 
 	
 class Irc(XMPPModule):
@@ -40,7 +40,7 @@ class Irc(XMPPModule):
 
 	# TODO: Relay messages from IRC to XMPP
 	def ircRecv(self, by, msg):
-		self.xmpp.sendGroupMsg(self.xmpp.config['irc']['muc'],"<IRC> {}: {}".format(by,msg))
+		self.xmpp.sendGroupMsg(self.xmpp.config['irc']['muc'],"<irc-{}>: {}".format(by,msg))
 
 	def recvGroupMsg(self, msg):
 		string = msg['body']
