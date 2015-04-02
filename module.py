@@ -9,6 +9,10 @@ class XMPPModule():
 	def __init__(self, xmpp):
 		self.xmpp = xmpp
 
+	# User-implemented deconstructor called when a module is unloaded
+	def deinit(self):
+		pass
+
 	# Start the passive thread if one is set
 	def start(self):
 		pass

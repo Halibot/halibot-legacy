@@ -59,6 +59,13 @@ class Bot(ClientXMPP):
 
 	def load_modules(self):
 		# TODO: Put this dir in config?
+		if self.modules:
+			for m in self.modules:
+				try:
+					m.deinit()
+				except Exception as e:
+					print(e)
+
 		self.modules = None
 		self.modavail = []
 		mods = []
