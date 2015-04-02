@@ -63,32 +63,31 @@ class Config(XMPPModule):
 		return args[0] + ' set.'
 
 	def handleMessage(self, msg):
-		if self.xmpp.isadmin(msg=msg):
-			cmd,args = (msg['body'].split(" ",1)[0], msg['body'].split(" ")[1:])
-			if cmd == "!config" and len(args) >= 1:
-				if args[0] == "enable":
-					reply = self.enable(args[1:])
-				elif args[0] == "disable":
-					reply = self.disable(args[1:])
-				elif args[0] == "write":
-					try:
-						self.xmpp.write_config()
-						reply = "Wrote config successfully!"
-					except:
-						reply = "Error writing config :("
-				elif args[0] == "reload":
-					try:
-						self.xmpp.load_config()
-						reply = "Reloaded config successfully!"
-					except:
-						reply = "Error reloading config :("
-				elif args[0] == "get":
-					reply = self.get(args[1:])
-				elif args[0] == 'set':
-					reply = self.set(args[1:])
-				else:
-					reply = "I could not comprehend your query."
-				self.xmpp.reply(msg, reply)
+		cmd,args = (msg['body'].split(" ",1)[0], msg['body'].split(" ")[1:])
+		if cmd == "!config" and len(args) >= 1 and self.xmpp.isadmin(msg=msg):
+			if args[0] == "enable":
+				reply = self.enable(args[1:])
+			elif args[0] == "disable":
+				reply = self.disable(args[1:])
+			elif args[0] == "write":
+				try:
+					self.xmpp.write_config()
+					reply = "Wrote config successfully!"
+				except:
+					reply = "Error writing config :("
+			elif args[0] == "reload":
+				try:
+					self.xmpp.load_config()
+					reply = "Reloaded config successfully!"
+				except:
+					reply = "Error reloading config :("
+			elif args[0] == "get":
+				reply = self.get(args[1:])
+			elif args[0] == 'set':
+				reply = self.set(args[1:])
+			else:
+				reply = "I could not comprehend your query."
+			self.xmpp.reply(msg, reply)
 
 	def help(self, feature):
 		if feature in ['enable', '!enable']:

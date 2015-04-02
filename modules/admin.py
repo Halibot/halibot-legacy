@@ -3,11 +3,8 @@ from module import XMPPModule
 class Admin(XMPPModule):
 
 	def handleMessage(self, msg):
-		if not self.xmpp.isadmin(msg=msg):
-			return
-
 		cmd, string = (msg["body"].split(" ")[0], " ".join(msg["body"].split(" ")[1:]))
-		if cmd == "!reloadmodules":
+		if cmd == "!reloadmodules" and self.xmpp.isadmin(msg=msg):
 			mods = self.xmpp.load_modules()
 			self.xmpp.reply(msg, "Modules reloaded successfully! Registered modules: " + ", ".join(mods))
 
