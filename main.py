@@ -157,6 +157,11 @@ class Bot(ClientXMPP):
 		else:
 			print("isadmin check failed")
 			raise Exception("Improper use of isadmin")
+
+		if name == '':
+			print("Received NULL name...")
+			return False
+
 		print("Admin check for '{}' is {}".format(name, "ACCEPTED" if name in self.config["admins"] else "DENIED"))
 		return name in self.config["admins"]
 
