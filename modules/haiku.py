@@ -7,7 +7,8 @@ def sylcnt(word):
 
 	exceptions = {
 		'maybe': 2,
-		'something': 2
+		'something': 2,
+		'sometimes': 2
 	}
 
 	if word in exceptions:
