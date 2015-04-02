@@ -11,7 +11,7 @@ class IrcClient(pydle.Client):
 
 	def on_channel_message(self, target, by, msg):
 		if msg.startswith("!list"):
-			self.message(self.module.xmpp.config['irc']['channel'], "\n" + "\n".join(self.module.xmpp.mucusers.keys()))
+			self.message(self.module.xmpp.config['irc']['channel'], "\n" + "\n".join(self.module.xmpp.mucusers[self.xmpp.config['irc']['muc']].keys()))
 			return
 
 		self.module.ircRecv(by, msg)
