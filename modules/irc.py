@@ -19,6 +19,10 @@ class IrcClient(pydle.Client):
 	def on_xmpp_msg(self, user, msg):
 		self.message(self.module.xmpp.config['irc']['channel'], "<xmpp-{}>: {}".format(user,msg))
 
+	def on_ctcp(self, by, target, what, contents):
+		if what == 'ACTION':
+			self.module.ircRecv(by, "/me " + by + " " + contents)
+
 	
 class Irc(XMPPModule):
 
