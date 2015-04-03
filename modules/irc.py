@@ -21,7 +21,7 @@ class IrcClient(pydle.Client):
 
 	def on_ctcp(self, by, target, what, contents):
 		if what == 'ACTION':
-			self.module.ircRecv(by, "/me " + by + " " + contents)
+			self.module.ircRecv(by, "/me " + contents)
 
 	
 class Irc(XMPPModule):
