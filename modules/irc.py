@@ -44,6 +44,10 @@ class Irc(XMPPModule):
 	
 		self._create_thread()
 
+	def deinit(self):
+		self.bot.disconnect()
+		self.bot.eventloop.stop()
+
 	def _create_thread(self):
 		self.thread = threading.Thread(target=self.bot.handle_forever)
 		self.thread.start()
