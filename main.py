@@ -62,7 +62,7 @@ class Bot(ClientXMPP):
 		if self.modules:
 			for m in self.modules:
 				try:
-					m.deinit()
+					self.modules[m].deinit()
 				except Exception as e:
 					print(e)
 
