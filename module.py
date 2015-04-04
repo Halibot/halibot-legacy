@@ -1,9 +1,7 @@
 class XMPPModule():
 	xmpp = None
-	threadfunc = None
 	priority = 0
 	terminate = False
-
 
 	# Default constructor. Try to avoid overriding __init__, use init() instead
 	def __init__(self, xmpp):
