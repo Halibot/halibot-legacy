@@ -12,7 +12,7 @@ class Toys(XMPPModule):
 	ppt = False
 	bcd = False
 
-	def init(self, xmpp):
+	def init(self):
 		self.enable_features()
 
 	def help(self, feature):
