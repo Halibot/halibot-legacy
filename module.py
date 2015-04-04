@@ -5,9 +5,13 @@ class XMPPModule():
 	terminate = False
 
 
-	# Initialize the module, start any passive threads here
+	# Default constructor. Try to avoid overriding __init__, use init() instead
 	def __init__(self, xmpp):
 		self.xmpp = xmpp
+
+	# Initialize the module. Use this, do not override __init__
+	def init(self):
+		pass
 
 	# User-implemented deconstructor called when a module is unloaded
 	def deinit(self):
@@ -40,4 +44,3 @@ class XMPPModule():
 	# Default help method
 	def help(self, bloop):
 		return 'This module does not implement a help method.'
-

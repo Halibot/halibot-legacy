@@ -87,13 +87,27 @@ class Bot(ClientXMPP):
 					self.modavail.append(name)
 		self.modules = OrderedDict(sorted(modules, key=lambda x: x[1].priority))
 
+		if not self.init_modules():
+			print("Error initializing modules!")
+
 		return self.modules.keys()
+
+	def init_modules(self):
+		for m in self.modules:
+			try:
+				m.init()
+			except Exception e:
+				# TODO: Better error outputting/handling here
+				print(e)
+				print("Could not load module " + m.__class__.__name__)
+
+		return True
 
 	def muc_presence(self, presence):
 		if presence['muc']['jid'] == self.jid:
 			return
 		self.mucusers[presence['muc']['room']][presence['muc']['nick']] = presence['muc']['jid'].bare
-		
+
 		for m in self.modules.values():
 			try:
 				m.handleMucPresence(presence)
@@ -153,7 +167,7 @@ class Bot(ClientXMPP):
 				name = self.mucusers[msg['mucroom']][msg["mucnick"]]
 			else:
 				name = msg["from"].bare
-	
+
 		elif jid:
 			name = jid
 		elif nick and room:
