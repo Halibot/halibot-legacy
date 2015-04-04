@@ -87,6 +87,10 @@ class Bot(ClientXMPP):
 					self.modavail.append(name)
 		self.modules = OrderedDict(sorted(modules, key=lambda x: x[1].priority))
 
+		for m in self.config["modules"]:
+			if m not in self.modules:
+				print("Warning: module {} exists in config, but was not loaded!".format(m))
+
 		if not self.init_modules():
 			print("Error initializing modules!")
 
