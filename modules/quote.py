@@ -4,16 +4,15 @@ import os
 
 
 class Quotes(XMPPModule):
-	
+
 	quotes = []
 
-	def __init__(self, xmpp):
-		XMPPModule.__init__(self, xmpp)
+	def init(self):
 		self.loadquotes()
 
 	def loadquotes(self):
 		with open("quotes.txt", "r") as f:
-			self.quotes = f.read().splitlines()	
+			self.quotes = f.read().splitlines()
 
 	def handleMessage(self, msg):
 		cmd, string = (msg['body'].split(' ',1)[0], " ".join(msg['body'].split(' ',1)[1:]))

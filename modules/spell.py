@@ -6,9 +6,7 @@ class Spell(XMPPModule):
 
 	priority = 40
 
-	def __init__(self, xmpp):
-		XMPPModule.__init__(self, xmpp)
-
+	def init(self):
 		spell = xmpp.config.get('spell')
 		self.aggro = (spell and spell.get('aggro')) or False
 		self.lang = (spell and spell.get('lang')) or 'en'
@@ -69,4 +67,3 @@ Corrects the spelling of those who request it.'''
   !spellignore - Inform the spell checker that it is wrong.
   !spellcheck  - Checks to see if a phrase is correct
 '''
-

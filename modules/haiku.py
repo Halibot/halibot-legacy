@@ -84,8 +84,7 @@ def make_poem(stanza):
 	return formed
 
 class Haiku(XMPPModule):
-	def __init__(self, xmpp):
-		XMPPModule.__init__(self, xmpp)
+	def init(self):
 		if 'haiku' in self.xmpp.config.keys():
 			self.forms = self.xmpp.config['haiku']['forms']
 		else:
@@ -143,4 +142,3 @@ Poems recognized ("!help haiku [form]" for more information):
 					reply = make_poem(s)
 					reply = 'I proffer that your prose is a poem, a ' + name + ':\n' + reply
 					self.xmpp.reply(msg, reply)
-

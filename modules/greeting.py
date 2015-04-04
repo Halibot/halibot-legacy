@@ -18,8 +18,7 @@ Set a custom greeting for yourself when you join the chatroom.
 '''
 
 
-	def __init__(self, xmpp):
-		XMPPModule.__init__(self,xmpp)
+	def init(self):
 		for r in self.xmpp.rooms:
 			self.greetings[r[0]] = {}
 

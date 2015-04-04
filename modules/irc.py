@@ -23,15 +23,14 @@ class IrcClient(pydle.Client):
 		if what == 'ACTION':
 			self.module.ircRecv(by, "/me " + contents)
 
-	
+
 class Irc(XMPPModule):
 
 	bot = None
 	thread = None
 	priority = 100
 
-	def __init__(self, xmpp):
-		XMPPModule.__init__(self, xmpp)
+	def init(self):
 		self.bot = IrcClient(
 			nickname                 = self.xmpp.config['irc']['nick'],
 			tls_certificate_file     = self.xmpp.config['irc'].get('tls_certificate_file'),
@@ -45,7 +44,7 @@ class Irc(XMPPModule):
 			tls_verify = self.xmpp.config['irc'].get('tls_verify')
 		)
 		self.bot.module = self
-	
+
 		self._create_thread()
 
 	def deinit(self):
@@ -71,7 +70,7 @@ class Irc(XMPPModule):
 			return
 
 
-		self.bot.on_xmpp_msg(name, string)	
+		self.bot.on_xmpp_msg(name, string)
 
 	def help(self, feature):
 		return '''Irc: Unifies an IRC channel and an XMPP server. All messages sent to either is relayed to the other.

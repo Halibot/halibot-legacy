@@ -3,8 +3,7 @@ import json
 
 class Config(XMPPModule):
 
-	def __init__(self, xmpp):
-		XMPPModule.__init__(self, xmpp)
+	def init(self):
 		if not 'modules' in self.xmpp.config:
 			self.xmpp.config['modules'] = []
 
@@ -136,4 +135,3 @@ Provides an interactive interface to the halibot conifgurable config.
   write   - Writes the config to a file.
   reload  - Reloads the config to a file.
 '''
-
