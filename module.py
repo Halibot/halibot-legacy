@@ -17,14 +17,6 @@ class XMPPModule():
 	def deinit(self):
 		pass
 
-	# Start the passive thread if one is set
-	def start(self):
-		pass
-
-	# Stop the passive thread
-	def stop(self):
-		pass
-
 	# Called when a message is received. Passes in whole message object
 	def recvMsg(self, msg):
 		self.handleMessage(msg)
