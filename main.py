@@ -96,7 +96,7 @@ class Bot(ClientXMPP):
 		for m in self.modules:
 			try:
 				m.init()
-			except Exception e:
+			except Exception as e:
 				# TODO: Better error outputting/handling here
 				print(e)
 				print("Could not load module " + m.__class__.__name__)
