@@ -31,7 +31,6 @@ Sample Configuration
         "Admin",
         "Cat",
         "Ddg",
-        "Eval",
         "Toys",
         "Xkcd",
         "Quotes",
@@ -55,4 +54,3 @@ Modules
 -------
 
 (todo)
-
