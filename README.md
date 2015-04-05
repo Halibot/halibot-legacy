@@ -37,7 +37,7 @@ Sample Configuration
         "Greeting",
         "Cleverbot",
         "Dorp",
-		"Irc"
+        "Irc"
     ],
     "muc": [
         {
