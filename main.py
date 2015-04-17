@@ -102,6 +102,10 @@ class Bot(ClientXMPP):
 
 
 	def load_modules(self):
+		for m in self.modules.items():
+			m[1].deinit()
+
+
 		self.load_module_registry()
 
 		for m in self.config["modules"]:
