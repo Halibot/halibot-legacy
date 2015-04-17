@@ -113,44 +113,6 @@ class Bot(ClientXMPP):
 
 		return self.modules.keys()
 
-	def old_load_modules(self):
-		# TODO: Put this dir in config?
-		if self.modules:
-			for m in self.modules:
-				try:
-					self.modules[m].deinit()
-				except Exception as e:
-					print(e)
-
-		self.modules = None
-		self.modavail = []
-		mods = []
-		modules = []
-		for f in os.listdir("./modules"):
-			if f[-2:] != "py":
-				continue
-			file,pathname,description = imp.find_module("./modules/" + f[:-3])
-			try:
-				mods.append(imp.load_module(f[:-3],file,pathname,description))
-			except Exception as e:
-				print(e)
-
-		for m in mods:
-			for name, obj in inspect.getmembers(m):
-				if inspect.isclass(obj) and issubclass(obj,XMPPModule) and name != "XMPPModule":
-					if name in self.config["modules"]:
-						modules.append( (name, obj(self)) )
-					self.modavail.append(name)
-		self.modules = OrderedDict(sorted(modules, key=lambda x: x[1].priority))
-
-		for m in self.config["modules"]:
-			if m not in self.modules:
-				print("Warning: module {} exists in config, but was not loaded!".format(m))
-
-		if not self.init_modules():
-			print("Error initializing modules!")
-
-		return self.modules.keys()
 
 	def init_modules(self):
 		if not self.modules:
