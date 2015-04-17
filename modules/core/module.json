@@ -9,6 +9,9 @@
 		},{
 			"name":"Help",
 			"path":"help.py"
+		},{
+			"name":"PackageManager",
+			"path":"pm.py"
 		}
 	]
 }
