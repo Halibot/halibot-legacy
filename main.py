@@ -22,8 +22,8 @@ class Bot(ClientXMPP):
 
 	jid = ""
 	rooms = []
-	modules = None
-	modavail = []
+	modules = OrderedDict()
+	modavail = {}
 	config = None
 	mucusers = {}
 
@@ -36,7 +36,6 @@ class Bot(ClientXMPP):
 		self.add_event_handler("message", self.message)
 		self.add_event_handler("groupchat_message", self.groupmsg)
 		self.add_event_handler("groupchat_presence", self.muc_presence)
-
 
 		self.load_modules()
 
@@ -57,7 +56,64 @@ class Bot(ClientXMPP):
 		with open("config.json", "w") as f:
 			f.write(json.dumps(self.config, indent=4, sort_keys=True))
 
+
+	def load_module_registry(self):
+		self.modavail = {}
+		os.chdir("./modules")
+
+		for d in os.listdir('.'):
+			if not os.path.isdir(d) or d[0] == '.':
+				continue
+			try:
+				with open(d + "/module.json", "r") as f:
+					foo = json.loads(f.read())
+
+				# TODO: Check for conflictions
+				for m in foo["modules"]:
+					self.modavail[m["name"]] = "./modules/" + d + "/" + m["path"]
+
+			except Exception as e:
+				print("Error loading from '{}': ".format(d) + str(e))
+		os.chdir('..')
+
+	def load_module(self, name):
+		if name not in self.modavail.keys():
+			print("Module '{}' not in registry".format(name))
+			return False
+
+		path = self.modavail[name]
+
+		file,pathname,description = imp.find_module(path[:-3])
+		try:
+			mod = imp.load_module(path[:-3],file,pathname,description)
+		except Exception as e:
+			print("Failed to load module '{}': ".format(name) + str(e))
+			return False
+
+		for name, obj in inspect.getmembers(mod):
+			if inspect.isclass(obj) and issubclass(obj,XMPPModule) and name != "XMPPModule":
+				if name in self.config["modules"]:
+					self.modules[name] = obj(self)
+
+		# OPTIMIZE: Make this not sort for every module loaded
+		self.modules = OrderedDict(sorted(self.modules.items(), key = lambda x: x[1].priority))	
+
+		return True
+
+
 	def load_modules(self):
+		self.load_module_registry()
+
+		for m in self.config["modules"]:
+			if not self.load_module(m):
+				print("Warning: module {} exists in config, but was not loaded!".format(m))
+
+		if not self.init_modules():
+			print("Error initializing modules!")
+
+		return self.modules.keys()
+
+	def old_load_modules(self):
 		# TODO: Put this dir in config?
 		if self.modules:
 			for m in self.modules:
@@ -97,6 +153,9 @@ class Bot(ClientXMPP):
 		return self.modules.keys()
 
 	def init_modules(self):
+		if not self.modules:
+			return False
+
 		for m in self.modules:
 			try:
 				self.modules[m].init()

@@ -1,0 +1,14 @@
+{
+	"modules":[
+		{
+			"name":"Admin",
+			"path":"admin.py"
+		},{
+			"name":"Config",
+			"path":"config.py"
+		},{
+			"name":"Help",
+			"path":"help.py"
+		}
+	]
+}
