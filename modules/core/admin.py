@@ -1,12 +1,22 @@
 from module import XMPPModule
+import halutils
 
 class Admin(XMPPModule):
 
 	def handleMessage(self, msg):
-		cmd, string = (msg["body"].split(" ")[0], " ".join(msg["body"].split(" ")[1:]))
+		cmd, args = halutils.splitArgList(msg)
 		if cmd == "!reloadmodules" and self.xmpp.isadmin(msg=msg):
 			mods = self.xmpp.load_modules()
 			self.xmpp.reply(msg, "Modules reloaded successfully! Registered modules: " + ", ".join(mods))
+		elif cmd == "!load":
+			if len(args) == 0:
+				self.xmpp.reply(msg, "Please supply names of modules to load!")
+				return
+			for m in args:
+				if self.xmpp.load_module(m):
+					self.xmpp.reply(msg, "Successfully loaded " + m)
+				else:
+					self.xmpp.reply(msg, "Failed to load " + m)
 
 	def help(self, feature):
 		if feature == None:
