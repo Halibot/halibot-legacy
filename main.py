@@ -74,7 +74,9 @@ class Bot(ClientXMPP):
 
 			except Exception as e:
 				print("Error loading from '{}': ".format(d) + str(e))
+
 		os.chdir('..')
+		return list(self.modavail.keys())
 
 	def load_module(self, name):
 		if name not in self.modavail.keys():
