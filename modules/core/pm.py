@@ -8,7 +8,7 @@ class PackageManager(XMPPModule):
 		cmd, args = halutils.splitArgList(msg)
 
 		if cmd == "!pm":
-			if not self.xmpp.isadmin(msg=msg) or True:
+			if not self.xmpp.isadmin(msg=msg):
 				self.xmpp.reply(msg, "You are not authorized to manage modules")
 				return
 			if args[0] not in self.commands:
@@ -49,10 +49,18 @@ class PackageManager(XMPPModule):
 
 		os.chdir('..')
 
+	def _refresh(self, msg, args):
+		mods = self.xmpp.load_module_registry()
+		if len(mods) == 0:
+			self.xmpp.reply(msg, "No modules available, or failed to refresh")	
+		else:
+			self.xmpp.reply(msg, "Available modules: " + ", ".join(mods))
+
 	# TODO: Support updating or something
 
 	commands = {
 		"install": _install,
-		"remove": _remove
+		"remove": _remove,
+		"refresh": _refresh
 	}
 			
