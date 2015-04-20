@@ -100,6 +100,15 @@ class Bot(ClientXMPP):
 
 		return True
 
+	def unload_module(self, name):
+		try:
+			m = self.modules.pop(name)
+		except Exception as e:
+			print("Failed unload module '{}'".format(name))
+			return False
+		m.deinit()
+		del m
+		return True
 
 	def load_modules(self):
 		for m in self.modules.items():
