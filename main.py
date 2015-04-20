@@ -80,15 +80,22 @@ class Bot(ClientXMPP):
 		if name not in self.modavail.keys():
 			print("Module '{}' not in registry".format(name))
 			return False
+		if name in self.modules:
+			try:
+				self.modules[name].deinit()
+			except Exception as e:
+				print("Failed to unload module '{}': {}".format(name, str(e)))
 
 		path = self.modavail[name]
 
 		file,pathname,description = imp.find_module(path[:-3])
+		sys.path.append(path.rsplit("/",1)[0])
 		try:
 			mod = imp.load_module(path[:-3],file,pathname,description)
 		except Exception as e:
 			print("Failed to load module '{}': ".format(name) + str(e))
 			return False
+		sys.path.pop()
 
 		for name, obj in inspect.getmembers(mod):
 			if inspect.isclass(obj) and issubclass(obj,XMPPModule) and name != "XMPPModule":
@@ -106,14 +113,15 @@ class Bot(ClientXMPP):
 		except Exception as e:
 			print("Failed unload module '{}'".format(name))
 			return False
-		m.deinit()
+		try:
+			m.deinit()
+		except Exception as e:
+			print("Failed to deinit module '{}': {}".format(name, str(e)))
+
 		del m
 		return True
 
 	def load_modules(self):
-		for m in self.modules.items():
-			m[1].deinit()
-
 
 		self.load_module_registry()
 
