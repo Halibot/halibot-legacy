@@ -17,6 +17,15 @@ class Admin(XMPPModule):
 					self.xmpp.reply(msg, "Successfully loaded " + m)
 				else:
 					self.xmpp.reply(msg, "Failed to load " + m)
+		elif cmd == "!unload":
+			if len(args) == 0:
+				self.xmpp.reply(msg, "Please supply names of modules to unload!")
+				return
+			for m in args:
+				if self.xmpp.unload_module(m):
+					self.xmpp.reply(msg, "Successfully unloaded " + m)
+				else:
+					self.xmpp.reply(msg, "Failed to unload " + m)
 
 	def help(self, feature):
 		if feature == None:
