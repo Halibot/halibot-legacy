@@ -155,9 +155,9 @@ class Bot(ClientXMPP):
 		if presence['muc']['jid'] == self.jid:
 			return
 
-		if presence['type'] == "available":
+		if presence['type'] is not "unavailable":
 			self.mucusers[presence['muc']['room']][presence['muc']['nick']] = presence['muc']['jid'].bare
-		elif presence['type'] == "unavailable":
+		else:
 			try:
 				del(self.mucusers[presence['muc']['room']][presence['muc']['nick']])
 			except:
@@ -246,5 +246,7 @@ if __name__ == '__main__':
 
 	xmpp = Bot(getpass.getpass())
 	xmpp.register_plugin('xep_0045')
+	xmpp.register_plugin('xep_0095')
+	xmpp.register_plugin('xep_0096')
 	xmpp.connect()
 	xmpp.process(block=True)
