@@ -155,9 +155,9 @@ class Bot(ClientXMPP):
 		if presence['muc']['jid'] == self.jid:
 			return
 
-		if presence['type'] is not "unavailable":
+		if presence['type'] in ("available", "away"):
 			self.mucusers[presence['muc']['room']][presence['muc']['nick']] = presence['muc']['jid'].bare
-		else:
+		elif presence['type'] in ("unavailable"):
 			try:
 				del(self.mucusers[presence['muc']['room']][presence['muc']['nick']])
 			except:
