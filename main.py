@@ -103,6 +103,11 @@ class Bot(ClientXMPP):
 			if inspect.isclass(obj) and issubclass(obj,XMPPModule) and name != "XMPPModule":
 				if name in self.config["modules"]:
 					self.modules[name] = obj(self)
+					try:
+						self.modules[name].init()
+					except Exception as e:
+						print("Failed to initialize module '{}': ".format(name) + str(e))
+						del self.modules[name]
 
 		# OPTIMIZE: Make this not sort for every module loaded
 		self.modules = OrderedDict(sorted(self.modules.items(), key = lambda x: x[1].priority))	
@@ -131,25 +136,8 @@ class Bot(ClientXMPP):
 			if not self.load_module(m):
 				print("Warning: module {} exists in config, but was not loaded!".format(m))
 
-		if not self.init_modules():
-			print("Error initializing modules!")
-
 		return self.modules.keys()
 
-
-	def init_modules(self):
-		if not self.modules:
-			return False
-
-		for m in self.modules:
-			try:
-				self.modules[m].init()
-			except Exception as e:
-				# TODO: Better error outputting/handling here
-				print(e)
-				print("Could not load module " + m)
-
-		return True
 
 	def muc_presence(self, presence):
 		if presence['muc']['jid'] == self.jid:
